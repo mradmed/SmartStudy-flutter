@@ -43,7 +43,7 @@ class _WelcomeState extends State<Welcome> {
                   color: Colors.green[600],
                   child: Text("Sign In",style: TextStyle(color: Colors.white,fontSize: 18.0),),
                   onPressed: () {
-                    Navigator.pushNamed(context, "/login");
+                    Navigator.pushReplacementNamed(context, "/login");
                   },
                   shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))
               ), width: 300.0,),
@@ -57,7 +57,7 @@ class _WelcomeState extends State<Welcome> {
                   color: Colors.green[600],
                   child: Text("Sign Up",style: TextStyle(color: Colors.white,fontSize: 18.0),),
                   onPressed: () {
-                    Navigator.pushNamed(context, "/register");
+                    Navigator.pushReplacementNamed(context, "/register");
                   },
                   shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))
               ), width: 300.0,),

@@ -23,16 +23,28 @@ class _SignUpState extends State<SignUp> {
     try {
       print("this is the email : - $email");
       print("this is the password : - $pass");
-      Response response = await post(
+      String role;
+      if(dropdownValue == "USER") {
+        role = "ROLE_USER";
+      }
+      else {
+        role = "ROLE_AUTHOR";
+      }
+
+        Response response = await post(
         Uri.http('10.0.2.2:3000', '/register'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
+
+
+
         body: jsonEncode(<String, String>{
           'username': name,
           'email': email,
           'phone': phone,
           'password': pass,
+          'role': role,
 
         }),
       );
@@ -42,7 +54,7 @@ class _SignUpState extends State<SignUp> {
       if(response.statusCode == 200) {
 
         print("The save is done");
-        Navigator.pushReplacementNamed(context, "/home");
+        Navigator.pushReplacementNamed(context, "/login");
 
       }
       else {
@@ -58,6 +70,8 @@ class _SignUpState extends State<SignUp> {
 
   }
 
+  String dropdownValue= "USER";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,16 +81,32 @@ class _SignUpState extends State<SignUp> {
             key: _formkey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image(image: AssetImage("assets/headerlog.png")),
-                SizedBox(
-                  height: 15,
-                ),
+              children: [Stack(
+                children: <Widget>[
+                  Image(image: AssetImage("assets/headerlog.png")),
+
+                  Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(20.0,30.0,20.0,0),
+                        child: Text("Hello!",style: TextStyle(fontSize: 45.0,color: Colors.white),),
+                      ),
+                      SizedBox(height: 10.0,),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(20.0,80.0,20.0,0),
+                        child: Text("You can create an account from here",style: TextStyle(fontSize: 20.0,color: Colors.white38),),
+                      ),
+                    ],
+                  ),
+
+
+                ],
+              ),
                 Padding(
                   padding: const EdgeInsets.only(bottom:15,left: 10,right: 10),
                   child: TextFormField(
                     keyboardType: TextInputType.text,
-                    decoration: buildInputDecoration(Icons.person,"Full Name"),
+                    decoration: buildInputDecoration(Icons.person,"Username"),
                     validator: (String value){
                       if(value.isEmpty)
                       {
@@ -127,7 +157,7 @@ class _SignUpState extends State<SignUp> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 15,left: 10,right: 10),
+                  padding: const EdgeInsets.only(bottom: 10,left: 10,right: 10),
                   child: TextFormField(
                     controller: password,
                     keyboardType: TextInputType.text,
@@ -170,12 +200,41 @@ class _SignUpState extends State<SignUp> {
 
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10,left: 10,right: 10),
+                  child: DropdownButton<String>(
+
+                    value: dropdownValue,
+                    icon: const Icon(Icons.arrow_downward),
+                    iconSize: 24,
+                    elevation: 16,
+                    underline: Container(
+                      height: 2,
+                      color: Colors.deepPurpleAccent,
+                    ),
+                    onChanged: (String newValue) {
+                      setState(() {
+                        dropdownValue = newValue;
+                      });
+                    },
+                    items: <String>['USER', 'AUTHOR']
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
+
+
+                  ),
+
 
                 SizedBox(
                   width: 200,
                   height: 50,
                   child: RaisedButton(
-                    color: Colors.redAccent,
+                    color: Colors.green[300],
                     onPressed: () async{
 
                       if(_formkey.currentState.validate())
@@ -192,8 +251,9 @@ class _SignUpState extends State<SignUp> {
                       }
                     },
                     shape: RoundedRectangleBorder(
+
                         borderRadius: BorderRadius.circular(50.0),
-                        side: BorderSide(color: Colors.blue,width: 2)
+                        side: BorderSide(color: Colors.white,width: 2)
                     ),
                     textColor:Colors.white,child: Text("Submit"),
 

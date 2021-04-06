@@ -50,7 +50,7 @@ class _SignInState extends State<SignIn> {
         print("The save is done");
         String value = await storage.read(key: "jwt");
         print("The value is $value");
-        Navigator.pushReplacementNamed(context, '/home');
+        Navigator.popAndPushNamed(context, '/home');
       }
       else {
         showAlertDialog(context,response.body);
@@ -71,65 +71,76 @@ class _SignInState extends State<SignIn> {
 
     return Scaffold(
 
-      body: SafeArea(child: Column(
-        children: <Widget>[ Stack(
-        children: <Widget>[
-          Image(image: AssetImage("assets/headerlog.png")),
+      body: SafeArea(child: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[ Stack(
+          children: <Widget>[
+            Image(image: AssetImage("assets/headerlog.png")),
 
-           Padding(
-             padding: const EdgeInsets.fromLTRB(20.0,30.0,20.0,0),
-             child: Text("Welcome Back!",style: TextStyle(fontSize: 45.0,color: Colors.white),),
-           ),
-          SizedBox(height: 10.0,),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20.0,80.0,20.0,0),
-            child: Text("Please login to your account",style: TextStyle(fontSize: 20.0,color: Colors.white38),),
-          ),
+             Padding(
+               padding: const EdgeInsets.fromLTRB(20.0,30.0,20.0,0),
+               child: Text("Welcome Back!",style: TextStyle(fontSize: 45.0,color: Colors.white),),
+             ),
+            SizedBox(height: 10.0,),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20.0,80.0,20.0,0),
+              child: Text("Please login to your account",style: TextStyle(fontSize: 20.0,color: Colors.white38),),
+            ),
 
 
-        ],
+          ],
+        ),
+            Container(child: Text("LOGIN HERE",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),margin: EdgeInsets.all(50.0)),
+            Padding(
+              padding: EdgeInsets.all(10),
+              child: TextField(
+                onChanged: (value) {
+                    email = value;
+                },
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Email',
+                    hintText: 'Enter email address',
+
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(10),
+              child: TextField(
+                onChanged: (value) {
+                  password= value;
+
+                },
+                obscureText: true,
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Password',
+                    hintText: 'Enter your secure password'
+                ),
+              ),
+            ),
+            SizedBox(child: ElevatedButton(
+                style: ElevatedButton.styleFrom(primary: Colors.green[300],shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))),
+                child: Text("Sign In",style: TextStyle(color: Colors.white,fontSize: 18.0),),
+                onPressed: () async{
+                    await loginCheck();
+                    print("Done with the login action");
+                },
+
+            ), width: 300.0,),
+            Container(child: FlatButton(
+              color: Colors.transparent,
+              onPressed:() => Navigator.pushNamed(context, "/register") ,
+              child: Text("Register here",style: TextStyle(fontWeight: FontWeight.bold,decoration: TextDecoration.underline),),
+            ),margin: EdgeInsets.fromLTRB(30, 40, 30, 0),)
+            
+
+          ],
+        ),
       ),
-          Padding(
-            padding: EdgeInsets.all(10),
-            child: TextField(
-              onChanged: (value) {
-                  email = value;
-              },
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Email',
-                  hintText: 'Enter email address',
 
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(10),
-            child: TextField(
-              onChanged: (value) {
-                password= value;
-
-              },
-              obscureText: true,
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Password',
-                  hintText: 'Enter your secure password'
-              ),
-            ),
-          ),
-          SizedBox(child: ElevatedButton(
-              style: ElevatedButton.styleFrom(primary: Colors.green[300],shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))),
-              child: Text("Sign In",style: TextStyle(color: Colors.white,fontSize: 18.0),),
-              onPressed: () async{
-                  await loginCheck();
-                  print("Done with the login action");
-              },
-
-          ), width: 300.0,),
-
-        ],
-      )),
+      ),
     );
   }
 }
